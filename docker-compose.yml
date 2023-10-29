@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    container_name: elf_pg_db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

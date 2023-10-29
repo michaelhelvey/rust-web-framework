@@ -1,0 +1,13 @@
+[package]
+edition = "2021"
+name = "cargo-elfdev"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+color-eyre = "0.6.2"
+notify = "6.1.1"
+tokio = {version = "1.33.0", features = ["full"]}
+tracing = "0.1.40"
+tracing-subscriber = "0.3.17"

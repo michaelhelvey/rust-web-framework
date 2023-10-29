@@ -1,0 +1,5 @@
+[workspace]
+members = [
+  "crates/cargo-elfdev",
+  "crates/elf",
+]
