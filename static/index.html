@@ -9,14 +9,32 @@
     <h1>Hello, world!</h1>
     <div>Holy cow, this is incredible!</div>
     <script>
-      const socket = new WebSocket("ws://localhost:9876");
-      socket.onmessage = function (event) {
-        console.log(event.data);
-        if (event.data === "reload") {
-          console.log("handling reload event from server");
-          window.location.reload();
-        }
-      };
+      let retryTimeout = 1000;
+
+      function connectToDevServer() {
+        const socket = new WebSocket("ws://localhost:6969/ws");
+        socket.onopen = function (event) {
+          console.log("[DEV SERVER]: Connected at ws://localhost:6969/ws");
+        };
+
+        socket.onclose = function (event) {
+          console.error(`[DEV SERVER]: Connection is closed.  Retrying in ${retryTimeout / 1000}s`);
+          setTimeout(() => {
+            connectToDevServer();
+            retryTimeout *= 2;
+          }, retryTimeout);
+        };
+
+        socket.onmessage = function (event) {
+          console.log("[DEV SERVER]: Message from server ", event.data);
+          if (event.data === "reload") {
+            console.log("[DEV SERVER]: Reloading page...");
+            window.location.reload();
+          }
+        };
+      }
+
+      connectToDevServer();
     </script>
   </body>
 </html>
