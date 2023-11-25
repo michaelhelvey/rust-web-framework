@@ -3,3 +3,4 @@ members = [
   "crates/cargo-elfdev",
   "crates/elf",
 ]
+resolver = "2"

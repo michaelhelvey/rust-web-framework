@@ -1,8 +1,9 @@
 use std::{
+    future::Future,
     net::SocketAddr,
     path::Path,
     sync::{Arc, RwLock},
-    time::Duration,
+    time::{Duration, Instant},
     vec,
 };
 use tokio_util::sync::CancellationToken;
@@ -44,6 +45,7 @@ enum DevServerState {
     Restarting,
 }
 
+/// Future that waits until port ${PORT:-3000} is able to be connected to.
 async fn wait_for_server_start() -> Result<()> {
     let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
 
@@ -68,6 +70,9 @@ async fn start_child_server() -> Result<Child> {
     let cmd = Command::new("cargo").args(&["run", "-p", "elf"]).spawn()?;
     wait_for_server_start().await?;
 
+    // TODO: decouple the concept of "create the child process" and "wait for the child process to
+    // start a server" so that we can do other things (like listen for signals) while we're waiting
+    // for the child server to start.
     return Ok(cmd);
 }
 
